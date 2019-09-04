@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .mytd, .myth { 
+        width: 4em !important;
+        word-break: break-all !important;;
+    }
+    table{
+        margin-bottom: 0em !important;
+    }
+    .myform{
+        margin: 10px;
+        text
+    }
+    input{
+        width: 500px !important;
+    }
+  
+    </style>
+<container style='margin: 15px'>
+    <form style='text-align: center' action="{% url 'get_blog' %}" method="POST" class="form-inline" >
+        <div class="form-group myform">
+            {% csrf_token %}
+            <input type="text" name='keyword' class="form-control" placeholder="검색어">
+            <button type="submit" class= "btn btn-primary form-control" >검색</button>
+        </div>
+    </form>
+
+    {% if result %}
+    <h3 style="margin: 10px" id="result_search">검색어: {{ result.search_keyword }}</h3>
+
+    <div style="margin: 0 10px">
+        <table class="table table-bordered">
+            <tr>
+                <th class="myth">글 제목</th>
+                <th class="myth">글 url</th>
+                <th class="myth">블로그(cafe,post)이름</th>
+                <th class="myth">접속url</th>
+            </tr>
+        </table>
+    </div>
+    {% for final_result in result.gotblog_set.all %}
+
+    <div style="margin: 0 10px">
+        <div>
+            <table class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <td class="mytd">{{ final_result.title }}</td>
+                    <td class="mytd" > <a href= "{{ final_result.content_url }}" target="_blank"> {{ final_result.content_url }}</td></a>
+                    <td class="mytd"> {{ final_result.original_name }}</td>
+                    <td class="mytd"> <a href= "{{ final_result.content_url }}" target="_blank"> {{ final_result.original_url }}</td></a>
+                </tr>   
+            </table>
+        </div>
+    </div>
+{% endfor %}
+{% else %}
+<div style='text-align: center'>검색결과가 없답니다.</div>
+{% endif %}
+</container>
+{% endblock %}
